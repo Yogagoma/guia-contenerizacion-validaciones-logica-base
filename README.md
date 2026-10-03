@@ -6,7 +6,7 @@ Para ejecutar estos programas, se requiere la instalación de:
 
 1. Python 3.10 o superior.
 2. Docker Desktop o Docker Engine.
-3. XAMPP, el cual ofrece el servidor Web para PHP.
+3. XAMPP.
 
 Para obtener el repositorio, puede descargar el archivo comprimido (.zip) o, teniendo instalado Git, clonar el repositorio ejecutando:
 
@@ -42,6 +42,21 @@ Script escrito en PHP que contienen funciones usando preg_match para limpiar dat
 
 3. Aplicar sanitización básica simulando la prevención de un ataque XSS.
 
+Se debe contar con XAMPP para permitir la creacion del servidor local de PHP.
+
+Para encender dicho servidor se debe ejecutar en el terminal (asegurandose de que el terminal este ubicado en la carpeta que almacena el archivo) el comando:
+
+``` sh
+php -S localhost:8000
+```
+
+Una vez se haya levantado el servidor se debe ingresar en el navegador el URL
+
+``` sh
+http://localhost:8000/validaciones.php 
+```
+Lo cual muestra la interfaz del programa creada con un script de HTML
+
 ## Reto 3
 Función que recibe dos rangos de horas y retorna True, si estos chocan y False, en caso contrario.
 
@@ -49,8 +64,7 @@ Posee un bloque try-except para ejecutar la comparación entre los rangos y capt
 
 Los rangos son recibidos como cadenas y después son convertidos en tuplas con objetos datetime para la posterior evaluación de la condición de choque de horarios.
 
-Para probar el programa, ejecute
+Para probar el programa, ejecute:
 ``` sh
 python funcion_horarios.py
 ```
-

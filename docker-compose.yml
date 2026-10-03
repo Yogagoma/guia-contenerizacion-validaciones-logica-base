@@ -1,30 +1,37 @@
-name: mydatabase
+# Reto 1: 
+name: reto-1
 
 services:
-  web:
+  web: # Servicio web
     build: .
     image: "image"
     ports:
       - "8000:8000"
     volumes:
-      - .:/code
+      - ./app:/code/app
     environment:
-      - DATABASE_URL=postgresql://user:password@db:5432/mydatabase
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     env_file:
       - .env
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
-  db:
-    image: postgres:17-alpine
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+  db: # Servicio de base de datos
+    image: postgres:18.6 # Imagen de PostgreSQL
+    environment: # Variables de entorno de PostgreSQL
+      POSTGRES_USER: ${POSTGRES_USER} # Usuario
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD} # Contraseña
+      POSTGRES_DB: ${POSTGRES_DB} # Nombre de la base de datos
     ports:
-      - "5432:5432"
-    volumes:
+      - "5432:5432" # Puerto estándar de PostgreSQL
+    volumes: # Volúmenes para persistencia de datos
       - db_data:/var/lib/postgresql
       - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck: # Medidas para verificar estado del contenedor
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 volumes:
   db_data:
